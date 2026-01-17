@@ -1,3 +1,4 @@
+
 const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
@@ -36,7 +37,7 @@ const config = {
   PREFIX: '.',
   MAX_RETRIES: 3,
   GROUP_INVITE_LINK: 'https://chat.whatsapp.com/Dh7gxX9AoVD8gsgWUkhB9r',
-  FREE_IMAGE_PATH: 'https://files.catbox.moe/es0f8r.jpg',
+  FREE_IMAGE: 'https://files.catbox.moe/es0f8r.jpg',
   NEWSLETTER_JID: '120363402507750390@newsletter', // replace with your own newsletter its the main newsletter
   
   // ✅ SUPPORT/VALIDATION NEWSLETTER ( recommended) 
@@ -73,7 +74,7 @@ const config = {
   CHANNEL_LINK: 'https://whatsapp.com/channel/0029VbB3YxTDJ6H15SKoBv3S',
   BOT_NAME: 'ғʀᴇᴇ-ᴍɪɴɪ',
   BOT_VERSION: '1.0.beta',
-  OWNER_NAME: 'ᴍᴀʟᴠɪɴ ᴋɪɴɢ',
+  OWNER_NAME: 'ᴍʀ xᴅᴋɪɴɢ',
   IMAGE_PATH: 'https://chat.whatsapp.com/Dh7gxX9AoVD8gsgWUkhB9r',
   BOT_FOOTER: '> ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴍᴀʟᴠɪɴ ᴛᴇᴄʜ',
   BUTTON_IMAGES: { ALIVE: 'https://files.catbox.moe/es0f8r.jpg' }
@@ -81,7 +82,7 @@ const config = {
 
 // ---------------- MONGO SETUP ----------------
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://malvintech11_db_user:0SBgxRy7WsQZ1KTq@cluster0.xqgaovj.mongodb.net/?appName=Cluster0'; //enter your mongodb url
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://malvintech11_db_user:0SBgxRy7WsQZ1KTq@cluster0.xqgaovj.mongodb.net/?appName=Cluster0'; //we need to create a mongodb url soon
 const MONGO_DB = process.env.MONGO_DB || 'Free_Mini';
 
 let mongoClient, mongoDB;
@@ -384,7 +385,7 @@ async function sendAdminConnectMessage(socket, number, groupResult, sessionConfi
   const admins = await loadAdminsFromMongo();
   const groupStatus = groupResult.status === 'success' ? `Joined (ID: ${groupResult.gid})` : `Failed to join group: ${groupResult.error}`;
   const botName = sessionConfig.botName || BOT_NAME_FREE;
-  const image = sessionConfig.logo || config.FREE_IMAGE_PATH;
+  const image = sessionConfig.logo || config.FREE_IMAGE;
   const caption = formatMessage(botName, `*📞 𝐍umber:* ${number}\n*🩵 𝐒tatus:* ${groupStatus}\n*🕒 𝐂onnected 𝐀t:* ${getZimbabweanTimestamp()}`, botName);
   for (const admin of admins) {
     try {
@@ -396,7 +397,7 @@ async function sendAdminConnectMessage(socket, number, groupResult, sessionConfi
           const buf = fs.readFileSync(image);
           await socket.sendMessage(to, { image: buf, caption });
         } catch (e) {
-          await socket.sendMessage(to, { image: { url: config.FREE_IMAGE_PATH }, caption });
+          await socket.sendMessage(to, { image: { url: config.FREE_IMAGE }, caption });
         }
       }
     } catch (err) {
@@ -410,7 +411,7 @@ async function sendAdminConnectMessage(socket, number, groupResult, sessionConfi
     const ownerJid = `${config.OWNER_NUMBER.replace(/[^0-9]/g,'')}@s.whatsapp.net`;
     const activeCount = activeSockets.size;
     const botName = sessionConfig.botName || BOT_NAME_FREE;
-    const image = sessionConfig.logo || config.FREE_IMAGE_PATH;
+    const image = sessionConfig.logo || config.FREE_IMAGE;
     const groupStatus = groupResult.status === 'success' ? `Joined (ID: ${groupResult.gid})` : `Failed to join group: ${groupResult.error}`;
     const caption = formatMessage(`*🥷 OWNER CONNECT — ${botName}*`, `*📞 𝐍umber:* ${number}\n*🩵 𝐒tatus:* ${groupStatus}\n*🕒 𝐂onnected 𝐀t:* ${getZimbabweanTimestamp()}\n\n*🔢 𝐀ctive 𝐒essions:* ${activeCount}`, botName);
     if (String(image).startsWith('http')) {
@@ -420,7 +421,7 @@ async function sendAdminConnectMessage(socket, number, groupResult, sessionConfi
         const buf = fs.readFileSync(image);
         await socket.sendMessage(ownerJid, { image: buf, caption });
       } catch (e) {
-        await socket.sendMessage(ownerJid, { image: { url: config.FREE_IMAGE_PATH }, caption });
+        await socket.sendMessage(ownerJid, { image: { url: config.FREE_IMAGE }, caption });
       }
     }
   } catch (err) { console.error('Failed to send owner connect message:', err); }
@@ -528,7 +529,7 @@ async function handleMessageRevocation(socket, number) {
     const userJid = jidNormalizedUser(socket.user.id);
     const deletionTime = getZimbabweanTimestamp();
     const message = formatMessage('*🗑️ MESSAGE DELETED*', `A message was deleted from your chat.\n*📄 𝐅rom:* ${messageKey.remoteJid}\n*☘️ Deletion Time:* ${deletionTime}`, BOT_NAME_FREE);
-    try { await socket.sendMessage(userJid, { image: { url: config.FREE_IMAGE_PATH }, caption: message }); }
+    try { await socket.sendMessage(userJid, { image: { url: config.FREE_IMAGE }, caption: message }); }
     catch (error) { console.error('*Failed to send deletion notification !*', error); }
   });
 }
@@ -591,6 +592,29 @@ function setupCommandHandlers(socket, number) {
         fileName: quoted[qType].fileName || ''
       };
     }
+    
+                // 🔹 Fake contact with dynamic bot name
+        const fakevcard = {
+        
+            key: {
+                remoteJid: "status@broadcast",
+                participant: "0@s.whatsapp.net",
+                fromMe: false,
+                id: "META_AI_FAKE_ID"
+            },
+            message: {
+                contactMessage: {
+                    displayName: "ғʀᴇᴇ ᴍɪɴɪ",
+                    vcard: `BEGIN:VCARD
+VERSION:3.0
+N:Free;;;;
+FN:Meta
+ORG:Meta Platforms
+TEL;type=CELL;type=VOICE;waid=13135550002:+1 313 555 0002
+END:VCARD`
+                }
+            }
+        };
 
     if (!command) return;
 
@@ -598,9 +622,153 @@ function setupCommandHandlers(socket, number) {
       switch (command) {
       
       // test command switch case
-case 'support':
-case 'dev':
-case 'developer': {
+
+case 'menu': {
+  try { await socket.sendMessage(sender, { react: { text: "🎐", key: msg.key } }); } catch(e){}
+
+  try {
+    const startTime = socketCreationTime.get(number) || Date.now();
+    const uptime = Math.floor((Date.now() - startTime) / 1000);
+    const hours = Math.floor(uptime / 3600);
+    const minutes = Math.floor((uptime % 3600) / 60);
+    const seconds = Math.floor(uptime % 60);
+
+    // load per-session config (logo, botName)
+    let userCfg = {};
+    try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; }
+    catch(e){ console.warn('menu: failed to load config', e); userCfg = {}; }
+
+    const title = userCfg.botName || '©ғʀᴇᴇ ᴍɪɴɪ ';
+
+
+    const text = `
+╭────────￫
+│  • ɴᴀᴍᴇ ${title}                        
+│  • ᴏᴡɴᴇʀ: ${config.OWNER_NAME || 'ᴍʀ xᴅᴋɪɴɢ'}            
+│  • ᴠᴇʀsɪᴏɴ: ${config.BOT_VERSION || '0.1+'}             
+│  • ᴘʟᴀᴛғᴏʀᴍ: ${process.env.PLATFORM || 'Heroku'}           
+│  • ᴜᴘᴛɪᴍᴇ: ${hours}h ${minutes}m ${seconds}s                
+╰────────￫
+╭────────￫
+│  🔧ғᴇᴀᴛᴜʀᴇs                  
+│  [1] 👑 ᴏᴡɴᴇʀ                           
+│  [2]..ᴄᴏᴍɪɴɢ sᴏᴏɴ                           
+│  [3]...                            
+│  [4]..                       
+│  [5]...                               
+╰───────￫
+
+🎯 ᴛᴀᴘ ᴀ ᴄᴀᴛᴇɢᴏʀʏ ʙᴇʟᴏᴡ!
+
+`.trim();
+
+    const buttons = [
+      { buttonId: `${config.PREFIX}owner`, buttonText: { displayText: "👑 ᴏᴡɴᴇʀ" }, type: 1 }
+      // ᴍᴏʀᴇ sᴏᴏɴ
+    ];
+
+    const defaultImg = config.IMAGE_PATH;
+    const useLogo = userCfg.logo || defaultImg;
+
+    // build image payload (url or buffer)
+    let imagePayload;
+    if (String(useLogo).startsWith('http')) imagePayload = { url: useLogo };
+    else {
+      try { imagePayload = fs.readFileSync(useLogo); } catch(e){ imagePayload = { url: defaultImg }; }
+    }
+
+    await socket.sendMessage(sender, {
+      image: imagePayload,
+      caption: text,
+      footer: "*▶ ● 𝐅𝚁𝙴𝙴 𝐁𝙾𝚃 *",
+      buttons,
+      headerType: 4
+    }, { quoted: fakevcard });
+
+  } catch (err) {
+    console.error('menu command error:', err);
+    try { await socket.sendMessage(sender, { text: '❌ Failed to show menu.' }, { quoted: msg }); } catch(e){}
+  }
+  break;
+}
+
+// ---------------------- PING ----------------------
+case 'ping': {
+  try {
+    const sanitized = (number || '').replace(/[^0-9]/g, '');
+    const cfg = await loadUserConfigFromMongo(sanitized) || {};
+    const botName = cfg.botName || BOT_NAME_FANCY;
+    const logo = cfg.logo || config.FREE_IMAGE;
+
+    const latency = Date.now() - (msg.messageTimestamp * 1000 || Date.now());
+
+    const text = `
+*📡 ${botName} ᴘɪɴɢ ɴᴏᴡ*
+
+*◈ 🛠️ 𝐋atency :*  ${latency}ms
+*◈ 🕢 𝐒erver 𝐓ime :* ${new Date().toLocaleString()}
+${config.BOT_FOOTER}
+`;
+
+    let imagePayload = String(logo).startsWith('http') ? { url: logo } : fs.readFileSync(logo);
+
+    await socket.sendMessage(sender, {
+      image: imagePayload,
+      caption: text,
+      footer: `*${botName} ᴘɪɴɢ*`,
+      buttons: [{ buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 }],
+      headerType: 4
+    }, { quoted: fakevcard });
+
+  } catch(e) {
+    console.error('ping error', e);
+    await socket.sendMessage(sender, { text: '❌ Failed to get ping.' }, { quoted: msg });
+  }
+  break;
+}
+
+// ==================== OWNER MENU ====================
+case 'owner': {
+  try { await socket.sendMessage(sender, { react: { text: "👑", key: msg.key } }); } catch(e){}
+
+  try {
+    let userCfg = {};
+    try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
+  
+    const text = `
+
+ \`👑 𝐎𝐖𝐍𝐄𝐑 𝐈𝐍𝐅𝐎 👑\`
+
+╭─ 🧑‍💼 𝐃𝐄𝐓𝐀𝐈𝐋𝐒
+│
+│ ✦ 𝐍𝐚𝐦𝐞 : ᴍʀ xᴅᴋɪɴɢ
+│ ✦ 𝐀𝐠𝐞  : 20+
+│ ✦ 𝐍𝐨.  : +263714757857
+│
+╰────────✧
+
+`.trim();
+
+    const buttons = [
+      { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 },
+      
+    ];
+
+    await socket.sendMessage(sender, {
+      text,
+      footer: "👑 𝘖𝘸𝘯𝘦𝘳 𝘐𝘯𝘧𝘰𝘳𝘮𝘢𝘵𝘪𝘰𝘯",
+      buttons
+    }, { quoted: fakevcard });
+
+  } catch (err) {
+    console.error('owner command error:', err);
+    try { await socket.sendMessage(sender, { text: '❌ Failed to show owner info.' }, { quoted: msg }); } catch(e){}
+  }
+  break;
+}
+//======== support ========//
+// u can remove this case block 
+case 'support': {
   const support = config.SUPPORT_NEWSLETTER;
   
   const message = `*🤝 SUPPORT THE DEVELOPER*\n\n` +
@@ -622,7 +790,7 @@ case 'developer': {
                   `\`\`\`\n\n` +
                   `*Thank you for your support!* 🙏`;
   
-  await socket.sendMessage(sender, { text: message }, { quoted: msg });
+  await socket.sendMessage(sender, { text: message }, { quoted: fakevcard });
   break;
 }
 
@@ -632,7 +800,7 @@ case 'developer': {
       }
     } catch (err) {
       console.error('Command handler error:', err);
-      try { await socket.sendMessage(sender, { image: { url: config.FREE_IMAGE_PATH }, caption: formatMessage('❌ ERROR', 'An error occurred while processing your command. Please try again.', BOT_NAME_FREE) }); } catch(e){}
+      try { await socket.sendMessage(sender, { image: { url: config.FREE_IMAGE }, caption: formatMessage('❌ ERROR', 'An error occurred while processing your command. Please try again.', BOT_NAME_FREE) }); } catch(e){}
     }
 
   });
@@ -663,7 +831,7 @@ async function deleteSessionAndCleanup(number, socketInstance) {
     try {
       const ownerJid = `${config.OWNER_NUMBER.replace(/[^0-9]/g,'')}@s.whatsapp.net`;
       const caption = formatMessage('*💀 OWNER NOTICE — SESSION REMOVED*', `Number: ${sanitized}\nSession removed due to logout.\n\nActive sessions now: ${activeSockets.size}`, BOT_NAME_FREE);
-      if (socketInstance && socketInstance.sendMessage) await socketInstance.sendMessage(ownerJid, { image: { url: config.FREE_IMAGE_PATH }, caption });
+      if (socketInstance && socketInstance.sendMessage) await socketInstance.sendMessage(ownerJid, { image: { url: config.FREE_IMAGE }, caption });
     } catch(e){}
     console.log(`Cleanup completed for ${sanitized}`);
   } catch (err) { console.error('deleteSessionAndCleanup error:', err); }
@@ -777,7 +945,7 @@ async function EmpirePair(number, res) {
           // Load per-session config (botName, logo)
           const userConfig = await loadUserConfigFromMongo(sanitizedNumber) || {};
           const useBotName = userConfig.botName || BOT_NAME_FREE;
-          const useLogo = userConfig.logo || config.FREE_IMAGE_PATH;
+          const useLogo = userConfig.logo || config.FREE_IMAGE;
 
           const initialCaption = formatMessage(useBotName,
             `*✅ 𝘊𝘰𝘯𝘯𝘦𝘤𝘵𝘦𝘥 𝘚𝘶𝘤𝘤𝘦𝘴𝘴𝘧𝘶𝘭𝘭𝘺*\n\n*🔢 𝘊𝘩𝘢𝘵 𝘕𝘣:*  ${sanitizedNumber}\n*🕒 𝘛𝘰 𝘊𝘰𝘯𝘯𝘦𝘤𝘵: 𝘉𝘰𝘵 𝘞𝘪𝘭𝘭 𝘉𝘦 𝘜𝘱 𝘈𝘯𝘥 𝘙𝘶𝘯𝘯𝘪𝘯𝘨 𝘐𝘯 𝘈 𝘍𝘦𝘸 𝘔𝘪𝘯𝘶𝘵𝘦𝘴*\n\n✅ Successfully connected!\n\n🔢 Number: ${sanitizedNumber}\n*🕒 Connecting: Bot will become active in a few seconds*`,
@@ -794,7 +962,7 @@ async function EmpirePair(number, res) {
                 const buf = fs.readFileSync(useLogo);
                 sentMsg = await socket.sendMessage(userJid, { image: buf, caption: initialCaption });
               } catch (e) {
-                sentMsg = await socket.sendMessage(userJid, { image: { url: config.FREE_IMAGE_PATH }, caption: initialCaption });
+                sentMsg = await socket.sendMessage(userJid, { image: { url: config.FREE_IMAGE }, caption: initialCaption });
               }
             }
           } catch (e) {
@@ -941,7 +1109,7 @@ router.get('/active', (req, res) => {
 
 
 router.get('/ping', (req, res) => {
-  res.status(200).send({ status: 'active', botName: BOT_NAME_FREE, message: '🍬 𝘕𝘢𝘳𝘶𝘵𝘰 𝘍𝘳𝘦𝘦 𝘉𝘰𝘵', activesession: activeSockets.size });
+  res.status(200).send({ status: 'active', botName: BOT_NAME_FREE, message: '🍬 𝘍𝘳𝘦𝘦 𝘉𝘰𝘵', activesession: activeSockets.size });
 });
 
 
@@ -1004,7 +1172,7 @@ router.get('/verify-otp', async (req, res) => {
     await setUserConfigInMongo(sanitizedNumber, storedData.newConfig);
     otpStore.delete(sanitizedNumber);
     const sock = activeSockets.get(sanitizedNumber);
-    if (sock) await sock.sendMessage(jidNormalizedUser(sock.user.id), { image: { url: config.FREE_IMAGE_PATH }, caption: formatMessage('📌 CONFIG UPDATED', 'Your configuration has been successfully updated!', BOT_NAME_FREE) });
+    if (sock) await sock.sendMessage(jidNormalizedUser(sock.user.id), { image: { url: config.FREE_IMAGE }, caption: formatMessage('📌 CONFIG UPDATED', 'Your configuration has been successfully updated!', BOT_NAME_FREE) });
     res.status(200).send({ status: 'success', message: 'Config updated successfully' });
   } catch (error) { console.error('Failed to update config:', error); res.status(500).send({ error: 'Failed to update config' }); }
 });
@@ -1125,6 +1293,5 @@ initMongo().catch(err => console.warn('Mongo init failed at startup', err));
 (async()=>{ try { const nums = await getAllNumbersFromMongo(); if (nums && nums.length) { for (const n of nums) { if (!activeSockets.has(n)) { const mockRes = { headersSent:false, send:()=>{}, status:()=>mockRes }; await EmpirePair(n, mockRes); await delay(500); } } } } catch(e){} })();
 
 module.exports = router;
-
 
 
