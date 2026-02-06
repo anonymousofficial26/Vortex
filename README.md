@@ -1,7 +1,7 @@
 <!-- Vortex Bot | Modern Profile README  -->
 
 <p align="center">
-  <img src="https://files.catbox.moe/2klf23.png" alt="Vortex Bot Banner" width="100%">
+  <img src="https://files.catbox.moe/f9gwsx.jpg" alt="Vortex Bot Banner" width="100%">
 </p>
 
 <h1 align="center">Hi 👋, I'm Anonymous</h1>
@@ -55,7 +55,7 @@ For support, join our [WhatsApp Channel](https://whatsapp.com/channel/0029Vb7VSm
 
 <div align="center">
 
-**© 2025 Vortex. Powered by Anonymous. All rights reserved.**
+**© 2025 Vortex. Powered by Malvin Tech. All rights reserved.**
 
 Made with ❤️ by Anonymous
 
