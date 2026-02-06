@@ -23,7 +23,7 @@
 ## 🌐 Deploy
 
 ### Heroku
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Anonymous/free-sc-mini)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/anonymousofficial26/Vortex)
 
 ### Other Platforms
 - Railway
