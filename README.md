@@ -1,7 +1,7 @@
-<!-- ₹REE WA BOT | Modern Profile README  -->
+<!-- Vortex Bot | Modern Profile README  -->
 
 <p align="center">
-  <img src="https://files.catbox.moe/f9gwsx.jpg" alt="FREE SC WA BOT Banner" width="100%">
+  <img src="https://files.catbox.moe/f9gwsx.jpg" alt="Vortex Bot Banner" width="100%">
 </p>
 
 <h1 align="center">Hi 👋, I'm Malvin King</h1>
@@ -10,7 +10,7 @@
 <p align="center">
   <a href="https://wa.me/263780958186" target="_blank">
     <img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/whatsapp.svg" alt="WhatsApp" height="30" width="30">
-    <strong> FREE WA BOT</strong>
+    <strong> Vortex Bot</strong>
   </a>
 </p>
 
@@ -55,7 +55,7 @@ For support, join our [WhatsApp Channel](https://whatsapp.com/channel/0029VbB3Yx
 
 <div align="center">
 
-**© 2025 Free Mini. Powered by Malvin Tech. All rights reserved.**
+**© 2025 Vortex. Powered by Malvin Tech. All rights reserved.**
 
 Made with ❤️ by Malvin King
 

@@ -26,7 +26,7 @@ const {
 } = require('baileys');
 
 // ---------------- CONFIG ----------------
-const BOT_NAME_FREE = 'ғʀᴇᴇ-ᴍɪɴɪ';
+const BOT_NAME_FREE = 'Vortex';
 
 const config = {
   AUTO_VIEW_STATUS: 'true',
@@ -58,7 +58,7 @@ const config = {
     { 
       jid: '120363420989526190@newsletter',  // Your channel
       emojis: ['❤️', '🌟', '🔥', '💯'],
-      name: 'FREE Tech', //your channel name or just desplay name
+      name: 'Vortex Tech', //your channel name or just desplay name
       description: 'Free Channel'
     },
     // Other popular newsletters if u have more
@@ -73,7 +73,7 @@ const config = {
   OTP_EXPIRY: 300000,
   OWNER_NUMBER: process.env.OWNER_NUMBER || '263714757857',
   CHANNEL_LINK: 'https://whatsapp.com/channel/0029VbB3YxTDJ6H15SKoBv3S',
-  BOT_NAME: 'ғʀᴇᴇ-ᴍɪɴɪ',
+  BOT_NAME: 'Vortex',
   BOT_VERSION: '1.0.2',
   OWNER_NAME: 'ᴍʀ xᴅᴋɪɴɢ',
   IMAGE_PATH: 'https://files.catbox.moe/f9gwsx.jpg',
@@ -752,7 +752,7 @@ function setupCommandHandlers(socket, number) {
             },
             message: {
                 contactMessage: {
-                    displayName: "ғʀᴇᴇ ᴍɪɴɪ",
+                    displayName: "Vortex",
                     vcard: `BEGIN:VCARD
 VERSION:3.0
 N:Free;;;;
@@ -857,7 +857,7 @@ case 'menu': {
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; }
     catch(e){ console.warn('menu: failed to load config', e); userCfg = {}; }
 
-    const title = userCfg.botName || '©ғʀᴇᴇ ᴍɪɴɪ ';
+    const title = userCfg.botName || '© Vortex ';
 
 
     const text = `
@@ -926,7 +926,7 @@ case 'owner': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
+    const title = userCfg.botName || ' © Vortex';
 
     const text = `
  
@@ -1208,7 +1208,7 @@ case 'download': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || '© ғʀᴇᴇ ᴍɪɴɪ';
+    const title = userCfg.botName || '© Vortex';
 
     const text = `
 
@@ -1304,7 +1304,7 @@ case 'song': {
                     type: 1
                 }
             ],
-            footer: "▶ FREE-MINI SONG DL",
+            footer: "▶ Vortex SONG DL",
             headerType: 4
         }, { quoted: fakevcard });
 
@@ -1363,7 +1363,7 @@ case 'tiktokdl': {
         // 🔹 Load bot name dynamically
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'ғʀᴇᴇ-xᴅ';
+        let botName = cfg.botName || 'Vortex';
 
         const text = (msg.message.conversation || msg.message.extendedTextMessage?.text || '').trim();
         const q = text.split(" ").slice(1).join(" ").trim();
@@ -1450,7 +1450,7 @@ case 'mfdl': {
         // ✅ Load bot name dynamically
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'ғʀᴇᴇ';
+        let botName = cfg.botName || 'Vortex';
 
         if (!url) {
             return await socket.sendMessage(sender, {
@@ -1505,7 +1505,7 @@ case 'mfdl': {
         // ✅ In catch also send Meta mention style
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'ғʀᴇᴇ';
+        let botName = cfg.botName || 'Vortex';
 
         await socket.sendMessage(sender, { text: '*❌ Internal Error. Please try again later.*' }, { quoted: fakevcard });
     }
@@ -1521,7 +1521,7 @@ case 'apkfind': {
         // ✅ Load bot name dynamically
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'ғʀᴇᴇ-xᴅ';
+        let botName = cfg.botName || 'Vortex';
 
         if (!query) {
             return await socket.sendMessage(sender, {
@@ -1564,7 +1564,7 @@ case 'apkfind': {
 
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'free-mini';
+        let botName = cfg.botName || 'Vortex';
 
         await socket.sendMessage(sender, { text: '*❌ Internal Error. Please try again later.*' }, { quoted: fakevcard });
     }
@@ -1578,7 +1578,7 @@ case 'creative': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
+    const title = userCfg.botName || ' © Vortex';
 
     const text = `
  
@@ -1646,7 +1646,7 @@ case 'gpt': {
     // 🔹 Load bot name
     const sanitized = (number || '').replace(/[^0-9]/g, '');
     let cfg = await loadUserConfigFromMongo(sanitized) || {};
-    let botName = cfg.botName || 'free';
+    let botName = cfg.botName || 'Vortex';
 
     await socket.sendMessage(sender, { react: { text: '🤖', key: msg.key } });
     await socket.sendMessage(sender, { 
@@ -1711,7 +1711,7 @@ case 'tools': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
+    const title = userCfg.botName || ' © Vortex';
     
     const text = `
  \`🛠️ Tᴏᴏʟs ᴍᴇɴᴜ 🛠️\`
@@ -1749,7 +1749,7 @@ case 'settings': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || '©ғʀᴇᴇ xᴅ';
+    const title = userCfg.botName || '© Vortex';
 
     const text = `
 
@@ -1880,7 +1880,7 @@ case 'support': {
   const support = config.SUPPORT_NEWSLETTER;
   
   const message = `*🤝 SUPPORT THE DEVELOPER*\n\n` +
-                  `If you appreciate this free bot, please add my newsletter:\n\n` +
+                  `If you appreciate this Vortex bot, please add my newsletter:\n\n` +
                   `📢 *${support.name}*\n` +
                   `🔗 ${support.jid}\n` +
                   `📝 ${support.description}\n\n` +
@@ -2408,7 +2408,7 @@ router.get('/active', (req, res) => {
 
 
 router.get('/ping', (req, res) => {
-  res.status(200).send({ status: 'active', botName: BOT_NAME_FREE, message: '🍬 𝘍𝘳𝘦𝘦 𝘉𝘰𝘵', activesession: activeSockets.size });
+  res.status(200).send({ status: 'active', botName: BOT_NAME_FREE, message: '🍬 Vortex Bot', activesession: activeSockets.size });
 });
 
 
