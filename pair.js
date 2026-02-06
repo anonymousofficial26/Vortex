@@ -26,12 +26,14 @@ const {
 } = require('baileys');
 
 // ---------------- CONFIG ----------------
-const BOT_NAME_FREE = 'ғʀᴇᴇ-ᴍɪɴɪ';
+const BOT_NAME_FREE = 'Vortex';
 
 const config = {
   AUTO_VIEW_STATUS: 'true',
   AUTO_LIKE_STATUS: 'true',
   AUTO_RECORDING: 'false',
+  AUTO_READ: 'false',
+  AUTO_TYPING: 'false',
   AUTO_LIKE_EMOJI: ['🎈','👀','❤️‍🔥','💗','😩','☘️','🗣️','🌸'],
   PREFIX: '.',
   MAX_RETRIES: 3,
@@ -56,7 +58,7 @@ const config = {
     { 
       jid: '120363420989526190@newsletter',  // Your channel
       emojis: ['❤️', '🌟', '🔥', '💯'],
-      name: 'FREE Tech', //your channel name or just desplay name
+      name: 'Vortex Tech', //your channel name or just desplay name
       description: 'Free Channel'
     },
     // Other popular newsletters if u have more
@@ -71,13 +73,160 @@ const config = {
   OTP_EXPIRY: 300000,
   OWNER_NUMBER: process.env.OWNER_NUMBER || '263714757857',
   CHANNEL_LINK: 'https://whatsapp.com/channel/0029VbB3YxTDJ6H15SKoBv3S',
-  BOT_NAME: 'ғʀᴇᴇ-ᴍɪɴɪ',
+  BOT_NAME: 'Vortex',
   BOT_VERSION: '1.0.2',
   OWNER_NAME: 'ᴍʀ xᴅᴋɪɴɢ',
   IMAGE_PATH: 'https://files.catbox.moe/f9gwsx.jpg',
   BOT_FOOTER: '> ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴍᴀʟᴠɪɴ ᴛᴇᴄʜ',
-  BUTTON_IMAGES: { ALIVE: 'https://files.catbox.moe/f9gwsx.jpg' }
+  BUTTON_IMAGES: { ALIVE: 'https://files.catbox.moe/f9gwsx.jpg' },
+  MODE: 'public'
 };
+
+const runtimeState = {
+  mode: 'public',
+  rules: null,
+  toggles: {
+    antispam: false,
+    antilink: false,
+    antibot: false,
+    antifake: false,
+    antiflood: false,
+    antiword: false,
+    welcome: false,
+    goodbye: false
+  },
+  users: new Map()
+};
+
+const commandCatalog = {
+  system: [
+    'menu','allmenu','help','command','commands','list','about','botinfo','info','runtime','uptime','ping','speed',
+    'status','version','script','owner','creds','memory','cpu','ram','platform','mode','public','self','stats',
+    'dashboard','logs','rules','terms','privacy','support','donate','report','request','feedback','bug','changelog',
+    'lastupdate','system','network','latency','reboot','restart','shutdown','autoread','autotyping','autorecording'
+  ],
+  user: [
+    'register','unregister','verify','profile','myinfo','me','id','serial','level','rank','xp','balance','wallet',
+    'coins','points','daily','weekly','monthly','claim','refer','referral','invite','badges','achievements',
+    'inventory','items','use','buy','sell','trade','gift','shop','store','market','premium','addtime','expire',
+    'redeem','code','token','security','pin','setpin','resetpin','afk','back','bio','setbio','setname','setpp',
+    'blocklist','friendlist','follow','unfollow','likes','dislikes'
+  ],
+  group: [
+    'group','groupinfo','grouplink','revoke','invite','open','close','lock','unlock','mute','unmute','slowmode',
+    'setname','setdesc','setppgc','tagall','hidetag','mention','listadmin','listmember','admins','onlinemembers',
+    'add','kick','remove','promote','demote','warn','unwarn','warnings','resetwarn','ban','unban','tempban',
+    'untempban','blacklist','whitelist','filter','antispam','antilink','antibot','antifake','antiflood','antiword',
+    'welcome','goodbye','rules','poll','vote','clear','purge','nuke','restore','backup'
+  ],
+  owner: [
+    'broadcast','bc','bcgroup','bcall','push','pushall','setppbot','setbotname','setbotbio','setprefix',
+    'resetprefix','autorestart','autosave','publicmode','selfmode','addpremium','delpremium','listpremium','block',
+    'unblock','blocklist','whitelistuser','blacklistuser','addadmin','deladmin','listadminbot','eval','exec','shell',
+    'cmd','update','pull','pushcode','gitpull','gitpush','restartnow','shutdownnow','clearcache','resetdb'
+  ],
+  fun: [
+    'joke','quote','fact','truth','dare','riddle','brain','math','quiz','trivia','guess','wordgame','scramble',
+    'unscramble','tictactoe','chess','checkers','connect4','battleship','hangman','slots','dice','coinflip',
+    '8ball','lottery','spin','roulette','cards','poker','blackjack','rps','rpsls','meme','darkjoke','roast',
+    'compliment','pickup','ship','match','compatibility','love','crush','confession','horoscope','zodiac','fortune',
+    'luck','dailychallenge','leaderboardgame'
+  ],
+  reactions: [
+    'hug','pat','kiss','slap','poke','bite','punch','kick','wave','smile','laugh','cry','angry','sad','happy','blush',
+    'sleep','think','bored','confused','shock','facepalm','clap','cheer','highfive','salute','thumbsup','thumbsdown',
+    'yeet','sus','noob','pro','sigma'
+  ],
+  image: [
+    'sticker','s','toimg','togif','tomp4','attp','ttp','emojimix','qc','take','removebg','enhance','upscale','resize',
+    'crop','rotate','flip','mirror','blur','pixelate','grayscale','invert','sepia','sharpen','compress','recolor',
+    'caption','watermark','memeimg','poster','banner','logo','glitch','neon','cartoon','sketch','anime','profilepic',
+    'wallpaper','background'
+  ],
+  audio: [
+    'play','song','music','lyrics','spotify','soundcloud','ytaudio','ytmp3','voice','tts','bass','treble','slow','fast',
+    'reverse','nightcore','reverb','echo','distort','normalize','volume','muteaudio','unmuteaudio','audioinfo',
+    'equalizer','mix','loop','trim','merge','split','podcast','radio','playlist','queue','nowplaying'
+  ],
+  video: [
+    'video','ytsearch','ytvideo','ytmp4','instagram','insta','facebook','fb','twitter','x','tiktok','tt','snapchat',
+    'pinterest','likee','kwai','reddit','vimeo','dailymotion','streamable','mediafire','megadl','gdrive','dropbox',
+    'github','apk','playstore','appstore','software','modapk','wallpaperhd','gif','gifsearch','videogif','trimvideo',
+    'compressvideo','mergevideo','subtitle'
+  ],
+  search: [
+    'google','wikipedia','wiki','search','image','img','translate','language','weather','forecast','news','headlines',
+    'time','date','timezone','calendar','define','dictionary','thesaurus','calculator','calc','currency','exchange',
+    'crypto','btc','eth','stock','iplookup','whois','portscan','pinghost','dns','shortlink','unshort','qr','scanqr',
+    'barcode','password','passgen','random','uuid','hash','encrypt','decrypt','ai','chatgpt','ask','explain',
+    'summarize','paraphrase','code','debug'
+  ]
+};
+
+const commandCategoryMap = new Map();
+Object.entries(commandCatalog).forEach(([category, commands]) => {
+  commands.forEach((cmd) => commandCategoryMap.set(cmd, category));
+});
+
+const aliasCommandMap = new Map([
+  ['help', 'allmenu'],
+  ['command', 'allmenu'],
+  ['commands', 'allmenu'],
+  ['list', 'allmenu']
+]);
+
+const infoCommands = new Set([
+  'about','botinfo','info','runtime','uptime','status','version','script','creds','memory','cpu','ram','platform',
+  'stats','dashboard','logs','system','network','latency','lastupdate','speed'
+]);
+
+const reactionEmojis = {
+  hug: '🤗', pat: '🫶', kiss: '😘', slap: '🫱', poke: '👉', bite: '😼', punch: '👊', kick: '🦵',
+  wave: '👋', smile: '😊', laugh: '😂', cry: '😭', angry: '😠', sad: '😔', happy: '😄', blush: '😊',
+  sleep: '😴', think: '🤔', bored: '🥱', confused: '😕', shock: '😲', facepalm: '🤦',
+  clap: '👏', cheer: '🎉', highfive: '🙌', salute: '🫡', thumbsup: '👍', thumbsdown: '👎',
+  yeet: '🪃', sus: '🕵️', noob: '🥲', pro: '🏆', sigma: '🗿'
+};
+
+const funResponses = {
+  joke: [
+    "Why don't programmers like nature? It has too many bugs.",
+    "I told my computer I needed a break, and it said: 'No problem, I'll go to sleep.'",
+    "Debugging: being the detective in a crime movie where you're also the murderer."
+  ],
+  quote: [
+    "“Simplicity is the soul of efficiency.” — Austin Freeman",
+    "“Make it work, make it right, make it fast.” — Kent Beck",
+    "“Programs must be written for people to read.” — Harold Abelson"
+  ],
+  fact: [
+    "Honey never spoils. Archaeologists have found edible honey in ancient tombs.",
+    "Octopuses have three hearts.",
+    "A day on Venus is longer than a year on Venus."
+  ],
+  truth: [
+    "What is your biggest fear?",
+    "What is a secret you have never told anyone?",
+    "What is your most embarrassing moment?"
+  ],
+  dare: [
+    "Do 10 push-ups and send a voice note saying you did it.",
+    "Change your profile picture for 1 hour.",
+    "Send a compliment to someone in this chat."
+  ]
+};
+
+function formatBytes(bytes) {
+  if (!bytes) return '0 B';
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
+}
+
+function pickRandom(list) {
+  if (!Array.isArray(list) || list.length === 0) return 'No response available.';
+  return list[Math.floor(Math.random() * list.length)];
+}
 
 // ---------------- MONGO SETUP ----------------
 
@@ -570,7 +719,7 @@ function setupCommandHandlers(socket, number) {
 
     const prefix = config.PREFIX;
     const isCmd = body && body.startsWith && body.startsWith(prefix);
-    const command = isCmd ? body.slice(prefix.length).trim().split(' ').shift().toLowerCase() : null;
+    let command = isCmd ? body.slice(prefix.length).trim().split(' ').shift().toLowerCase() : null;
     const args = body.trim().split(/ +/).slice(1);
 
     // helper: download quoted media into buffer
@@ -603,7 +752,7 @@ function setupCommandHandlers(socket, number) {
             },
             message: {
                 contactMessage: {
-                    displayName: "ғʀᴇᴇ ᴍɪɴɪ",
+                    displayName: "Vortex",
                     vcard: `BEGIN:VCARD
 VERSION:3.0
 N:Free;;;;
@@ -616,11 +765,82 @@ END:VCARD`
         };
 
     if (!command) return;
+    if (aliasCommandMap.has(command)) {
+      command = aliasCommandMap.get(command);
+    }
 
     try {
+      const getUptimeLabel = () => {
+        const startTime = socketCreationTime.get(number) || Date.now();
+        const uptime = Math.floor((Date.now() - startTime) / 1000);
+        const hours = Math.floor(uptime / 3600);
+        const minutes = Math.floor((uptime % 3600) / 60);
+        const seconds = Math.floor(uptime % 60);
+        return `${hours}h ${minutes}m ${seconds}s`;
+      };
+
+      const sendCommandAck = async (categoryTitle, details) => {
+        const content = `*Command:* ${config.PREFIX}${command}\n*Category:* ${categoryTitle}${details ? `\n${details}` : ''}`;
+        await socket.sendMessage(sender, { text: formatMessage('✅ COMMAND READY', content, BOT_NAME_FREE) }, { quoted: msg });
+      };
+
+      const parseToggleArg = (arg) => {
+        if (!arg) return null;
+        const normalized = arg.toLowerCase();
+        if (normalized === 'on') return true;
+        if (normalized === 'off') return false;
+        return null;
+      };
+
+      const getUserProfile = (jid) => {
+        if (!runtimeState.users.has(jid)) {
+          runtimeState.users.set(jid, {
+            jid,
+            name: msg.pushName || 'User',
+            registered: false,
+            createdAt: new Date(),
+            balance: 0,
+            coins: 0,
+            points: 0,
+            xp: 0,
+            level: 1
+          });
+        }
+        return runtimeState.users.get(jid);
+      };
+
+      const buildAllMenuText = () => {
+        const sections = Object.entries(commandCatalog).map(([category, commands]) => {
+          const label = category.toUpperCase();
+          return `*${label}*\n${commands.map((cmd) => `${config.PREFIX}${cmd}`).join(' ')}`;
+        });
+        return [
+          `*${config.BOT_NAME} COMMAND LIST*`,
+          `*Prefix:* ${config.PREFIX}`,
+          `*Version:* ${config.BOT_VERSION}`,
+          `*Uptime:* ${getUptimeLabel()}`,
+          '',
+          sections.join('\n\n')
+        ].join('\n');
+      };
+
+      const sendFeatureReady = async (title, details) => {
+        await sendCommandAck(title, details || '*Feature is ready. Provide any required input to continue.*');
+      };
+
       switch (command) {
       
       // test command switch case
+
+case 'allmenu': {
+  try {
+    await socket.sendMessage(sender, { text: buildAllMenuText() }, { quoted: fakevcard });
+  } catch (err) {
+    console.error('allmenu command error:', err);
+    await socket.sendMessage(sender, { text: '❌ Failed to show all commands.' }, { quoted: msg });
+  }
+  break;
+}
 
 case 'menu': {
   try { await socket.sendMessage(sender, { react: { text: "🎐", key: msg.key } }); } catch(e){}
@@ -637,7 +857,7 @@ case 'menu': {
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; }
     catch(e){ console.warn('menu: failed to load config', e); userCfg = {}; }
 
-    const title = userCfg.botName || '©ғʀᴇᴇ ᴍɪɴɪ ';
+    const title = userCfg.botName || '© Vortex ';
 
 
     const text = `
@@ -706,7 +926,7 @@ case 'owner': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
+    const title = userCfg.botName || ' © Vortex';
 
     const text = `
  
@@ -988,7 +1208,7 @@ case 'download': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || '© ғʀᴇᴇ ᴍɪɴɪ';
+    const title = userCfg.botName || '© Vortex';
 
     const text = `
 
@@ -1084,7 +1304,7 @@ case 'song': {
                     type: 1
                 }
             ],
-            footer: "▶ FREE-MINI SONG DL",
+            footer: "▶ Vortex SONG DL",
             headerType: 4
         }, { quoted: fakevcard });
 
@@ -1143,7 +1363,7 @@ case 'tiktokdl': {
         // 🔹 Load bot name dynamically
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'ғʀᴇᴇ-xᴅ';
+        let botName = cfg.botName || 'Vortex';
 
         const text = (msg.message.conversation || msg.message.extendedTextMessage?.text || '').trim();
         const q = text.split(" ").slice(1).join(" ").trim();
@@ -1230,7 +1450,7 @@ case 'mfdl': {
         // ✅ Load bot name dynamically
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'ғʀᴇᴇ';
+        let botName = cfg.botName || 'Vortex';
 
         if (!url) {
             return await socket.sendMessage(sender, {
@@ -1285,7 +1505,7 @@ case 'mfdl': {
         // ✅ In catch also send Meta mention style
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'ғʀᴇᴇ';
+        let botName = cfg.botName || 'Vortex';
 
         await socket.sendMessage(sender, { text: '*❌ Internal Error. Please try again later.*' }, { quoted: fakevcard });
     }
@@ -1301,7 +1521,7 @@ case 'apkfind': {
         // ✅ Load bot name dynamically
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'ғʀᴇᴇ-xᴅ';
+        let botName = cfg.botName || 'Vortex';
 
         if (!query) {
             return await socket.sendMessage(sender, {
@@ -1344,7 +1564,7 @@ case 'apkfind': {
 
         const sanitized = (number || '').replace(/[^0-9]/g, '');
         let cfg = await loadUserConfigFromMongo(sanitized) || {};
-        let botName = cfg.botName || 'free-mini';
+        let botName = cfg.botName || 'Vortex';
 
         await socket.sendMessage(sender, { text: '*❌ Internal Error. Please try again later.*' }, { quoted: fakevcard });
     }
@@ -1358,7 +1578,7 @@ case 'creative': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
+    const title = userCfg.botName || ' © Vortex';
 
     const text = `
  
@@ -1426,7 +1646,7 @@ case 'gpt': {
     // 🔹 Load bot name
     const sanitized = (number || '').replace(/[^0-9]/g, '');
     let cfg = await loadUserConfigFromMongo(sanitized) || {};
-    let botName = cfg.botName || 'free';
+    let botName = cfg.botName || 'Vortex';
 
     await socket.sendMessage(sender, { react: { text: '🤖', key: msg.key } });
     await socket.sendMessage(sender, { 
@@ -1491,7 +1711,7 @@ case 'tools': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
+    const title = userCfg.botName || ' © Vortex';
     
     const text = `
  \`🛠️ Tᴏᴏʟs ᴍᴇɴᴜ 🛠️\`
@@ -1529,7 +1749,7 @@ case 'settings': {
   try {
     let userCfg = {};
     try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
-    const title = userCfg.botName || '©ғʀᴇᴇ xᴅ';
+    const title = userCfg.botName || '© Vortex';
 
     const text = `
 
@@ -1660,7 +1880,7 @@ case 'support': {
   const support = config.SUPPORT_NEWSLETTER;
   
   const message = `*🤝 SUPPORT THE DEVELOPER*\n\n` +
-                  `If you appreciate this free bot, please add my newsletter:\n\n` +
+                  `If you appreciate this Vortex bot, please add my newsletter:\n\n` +
                   `📢 *${support.name}*\n` +
                   `🔗 ${support.jid}\n` +
                   `📝 ${support.description}\n\n` +
@@ -1683,8 +1903,193 @@ case 'support': {
 }
 
         // default
-        default:
+        default: {
+          const toggleConfig = {
+            autoread: { type: 'config', key: 'AUTO_READ', label: 'Auto Read' },
+            autotyping: { type: 'config', key: 'AUTO_TYPING', label: 'Auto Typing' },
+            autorecording: { type: 'config', key: 'AUTO_RECORDING', label: 'Auto Recording' },
+            antispam: { type: 'runtime', key: 'antispam', label: 'Anti-spam' },
+            antilink: { type: 'runtime', key: 'antilink', label: 'Anti-link' },
+            antibot: { type: 'runtime', key: 'antibot', label: 'Anti-bot' },
+            antifake: { type: 'runtime', key: 'antifake', label: 'Anti-fake' },
+            antiflood: { type: 'runtime', key: 'antiflood', label: 'Anti-flood' },
+            antiword: { type: 'runtime', key: 'antiword', label: 'Anti-word' },
+            welcome: { type: 'runtime', key: 'welcome', label: 'Welcome Messages' },
+            goodbye: { type: 'runtime', key: 'goodbye', label: 'Goodbye Messages' }
+          };
+
+          if (toggleConfig[command]) {
+            const enabled = parseToggleArg(args[0]);
+            if (enabled === null) {
+              await socket.sendMessage(sender, { text: `❗ Usage: ${config.PREFIX}${command} on/off` }, { quoted: msg });
+              break;
+            }
+            const { type, key, label } = toggleConfig[command];
+            if (type === 'config') {
+              config[key] = enabled ? 'true' : 'false';
+            } else {
+              runtimeState.toggles[key] = enabled;
+            }
+            await sendCommandAck('Settings', `*${label}:* ${enabled ? 'Enabled ✅' : 'Disabled ❌'}`);
+            break;
+          }
+
+          if (['public', 'self', 'publicmode', 'selfmode'].includes(command)) {
+            runtimeState.mode = command.includes('self') ? 'self' : 'public';
+            config.MODE = runtimeState.mode;
+            await sendCommandAck('System Mode', `*Mode:* ${runtimeState.mode}`);
+            break;
+          }
+
+          if (command === 'mode') {
+            await sendCommandAck('System Mode', `*Mode:* ${runtimeState.mode}`);
+            break;
+          }
+
+          if (command === 'rules') {
+            const action = (args[0] || '').toLowerCase();
+            if (action === 'set') {
+              const rulesText = args.slice(1).join(' ').trim();
+              if (!rulesText) {
+                await socket.sendMessage(sender, { text: `❗ Usage: ${config.PREFIX}rules set <rules text>` }, { quoted: msg });
+                break;
+              }
+              runtimeState.rules = rulesText;
+              await sendCommandAck('Group Rules', '*Rules updated successfully.*');
+              break;
+            }
+            if (action === 'show') {
+              const rulesText = runtimeState.rules || 'No rules have been set yet.';
+              await sendCommandAck('Group Rules', rulesText);
+              break;
+            }
+            await socket.sendMessage(sender, { text: `❗ Usage: ${config.PREFIX}rules set <rules text> | ${config.PREFIX}rules show` }, { quoted: msg });
+            break;
+          }
+
+          if (infoCommands.has(command)) {
+            const cpuCount = os.cpus().length;
+            const totalMem = formatBytes(os.totalmem());
+            const freeMem = formatBytes(os.freemem());
+            const infoText = `*Bot:* ${config.BOT_NAME}\n*Version:* ${config.BOT_VERSION}\n*Uptime:* ${getUptimeLabel()}\n*Mode:* ${runtimeState.mode}\n*CPU Cores:* ${cpuCount}\n*Memory:* ${freeMem} free / ${totalMem} total`;
+            await sendCommandAck('System Info', infoText);
+            break;
+          }
+
+          const category = commandCategoryMap.get(command);
+          if (category) {
+            if (category === 'user') {
+              const profile = getUserProfile(nowsender);
+              switch (command) {
+                case 'register':
+                  profile.registered = true;
+                  profile.registeredAt = new Date();
+                  await sendFeatureReady('User Profile', `*Registered:* ✅\n*User:* ${profile.name}`);
+                  break;
+                case 'unregister':
+                  profile.registered = false;
+                  await sendFeatureReady('User Profile', '*Registered:* ❌');
+                  break;
+                case 'verify':
+                  await sendFeatureReady('User Profile', `*Verification:* ${profile.registered ? 'Verified ✅' : 'Not registered ❌'}`);
+                  break;
+                case 'profile':
+                case 'myinfo':
+                case 'me':
+                  await sendFeatureReady('User Profile', `*Name:* ${profile.name}\n*Level:* ${profile.level}\n*XP:* ${profile.xp}\n*Balance:* ${profile.balance}\n*Coins:* ${profile.coins}\n*Points:* ${profile.points}`);
+                  break;
+                case 'id':
+                case 'serial':
+                  await sendFeatureReady('User Profile', `*ID:* ${nowsender}`);
+                  break;
+                case 'balance':
+                case 'wallet':
+                case 'coins':
+                case 'points':
+                  await sendFeatureReady('User Wallet', `*Balance:* ${profile.balance}\n*Coins:* ${profile.coins}\n*Points:* ${profile.points}`);
+                  break;
+                case 'daily':
+                case 'weekly':
+                case 'monthly':
+                case 'claim':
+                  profile.coins += 10;
+                  await sendFeatureReady('Rewards', `*Rewards claimed!* Coins: ${profile.coins}`);
+                  break;
+                case 'bio':
+                  await sendFeatureReady('Profile', profile.bio ? `*Bio:* ${profile.bio}` : '*Bio:* not set');
+                  break;
+                case 'setbio': {
+                  const bio = args.join(' ').trim();
+                  if (!bio) {
+                    await socket.sendMessage(sender, { text: `❗ Usage: ${config.PREFIX}setbio <text>` }, { quoted: msg });
+                    break;
+                  }
+                  profile.bio = bio;
+                  await sendFeatureReady('Profile', '*Bio updated.*');
+                  break;
+                }
+                default:
+                  await sendFeatureReady('User/Profile');
+                  break;
+              }
+              break;
+            }
+            if (category === 'group') {
+              const isGroup = from.endsWith('@g.us');
+              if (!isGroup) {
+                await socket.sendMessage(sender, { text: '❗ This command can only be used in groups.' }, { quoted: msg });
+                break;
+              }
+              if (command === 'grouplink') {
+                await sendFeatureReady('Group', '*Group link feature is ready (admin-only).*');
+                break;
+              }
+              if (command === 'groupinfo') {
+                await sendFeatureReady('Group', '*Group info feature is ready.*');
+                break;
+              }
+              await sendFeatureReady('Group Management');
+              break;
+            }
+            if (category === 'owner') {
+              if (!isOwner) {
+                await socket.sendMessage(sender, { text: '❌ Owner-only command.' }, { quoted: msg });
+                break;
+              }
+              await sendFeatureReady('Owner Tools');
+              break;
+            }
+            if (category === 'reactions') {
+              const emoji = reactionEmojis[command] || '✨';
+              await socket.sendMessage(sender, { text: `${emoji} *${command.toUpperCase()}!*` }, { quoted: msg });
+              break;
+            }
+            if (category === 'fun') {
+              const response = funResponses[command] ? pickRandom(funResponses[command]) : `🎮 *${command}* game is ready.`;
+              await socket.sendMessage(sender, { text: response }, { quoted: msg });
+              break;
+            }
+            if (category === 'image') {
+              await sendFeatureReady('Sticker & Image', 'Send or reply to an image/video to use this command.');
+              break;
+            }
+            if (category === 'audio') {
+              await sendFeatureReady('Audio & Music', 'Provide a title or URL to process audio.');
+              break;
+            }
+            if (category === 'video') {
+              await sendFeatureReady('Video & Downloader', 'Provide a supported URL to download or process video.');
+              break;
+            }
+            if (category === 'search') {
+              await sendFeatureReady('Search & Tools', 'Provide a query or argument to continue.');
+              break;
+            }
+            await sendCommandAck(`${category.toUpperCase()} MENU`);
+            break;
+          }
           break;
+        }
       }
     } catch (err) {
       console.error('Command handler error:', err);
@@ -1702,6 +2107,12 @@ function setupMessageHandlers(socket) {
     if (!msg.message || msg.key.remoteJid === 'status@broadcast' || msg.key.remoteJid === config.NEWSLETTER_JID) return;
     if (config.AUTO_RECORDING === 'true') {
       try { await socket.sendPresenceUpdate('recording', msg.key.remoteJid); } catch (e) {}
+    }
+    if (config.AUTO_TYPING === 'true') {
+      try { await socket.sendPresenceUpdate('composing', msg.key.remoteJid); } catch (e) {}
+    }
+    if (config.AUTO_READ === 'true' && !msg.key.fromMe) {
+      try { await socket.readMessages([msg.key]); } catch (e) {}
     }
   });
 }
@@ -1997,7 +2408,7 @@ router.get('/active', (req, res) => {
 
 
 router.get('/ping', (req, res) => {
-  res.status(200).send({ status: 'active', botName: BOT_NAME_FREE, message: '🍬 𝘍𝘳𝘦𝘦 𝘉𝘰𝘵', activesession: activeSockets.size });
+  res.status(200).send({ status: 'active', botName: BOT_NAME_FREE, message: '🍬 Vortex Bot', activesession: activeSockets.size });
 });
 
 

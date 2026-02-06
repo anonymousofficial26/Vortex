@@ -12,7 +12,7 @@ module.exports = {
     NEWSLETTER_MESSAGE_ID: '428',
     OTP_EXPIRY: 300000,
     NEWS_JSON_URL: '',
-    BOT_NAME: 'ғʀᴇᴇ-ᴍɪɴɪ',
+    BOT_NAME: 'Vortex',
     OWNER_NAME: 'ᴍʀ xᴅᴋɪɴɢ',
     OWNER_NUMBER: '263714757857',
     BOT_VERSION: '1.0.2',
