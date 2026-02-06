@@ -45,11 +45,11 @@ This project is licensed under the MIT License.
 **Anonymous (Anonymous)**
 
 - GitHub: [@Anonymous](https://github.com/Anonymous)
-- WhatsApp Channel: [Join Channel](https://chat.whatsapp.com/Dh7gxX9AoVD8gsgWUkhB9r)
+- WhatsApp Channel: [Join Channel](https://whatsapp.com/channel/0029Vb7VSm62f3EAZILJ550J)
 
 ## 💬 Support
 
-For support, join our [WhatsApp Channel](https://chat.whatsapp.com/Dh7gxX9AoVD8gsgWUkhB9r) or open an issue on GitHub.
+For support, join our [WhatsApp Channel](https://whatsapp.com/channel/0029Vb7VSm62f3EAZILJ550J) or open an issue on GitHub.
 
 ---
 

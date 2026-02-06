@@ -37,7 +37,7 @@ const config = {
   AUTO_LIKE_EMOJI: ['🎈','👀','❤️‍🔥','💗','😩','☘️','🗣️','🌸'],
   PREFIX: '.',
   MAX_RETRIES: 3,
-  GROUP_INVITE_LINK: 'https://chat.whatsapp.com/Dh7gxX9AoVD8gsgWUkhB9r',
+  GROUP_INVITE_LINK: 'https://chat.whatsapp.com/H5pumKQEwT98Xq3rz2kdlL',
   FREE_IMAGE: 'https://files.catbox.moe/2klf23.png',
   NEWSLETTER_JID: '', // newsletters disabled
   
@@ -52,7 +52,7 @@ const config = {
   
   OTP_EXPIRY: 300000,
   OWNER_NUMBER: process.env.OWNER_NUMBER || '263789544743',
-  CHANNEL_LINK: 'https://chat.whatsapp.com/Dh7gxX9AoVD8gsgWUkhB9r',
+  CHANNEL_LINK: 'https://whatsapp.com/channel/0029Vb7VSm62f3EAZILJ550J',
   BOT_NAME: 'Vortex',
   BOT_VERSION: '1.0.2',
   OWNER_NAME: 'Anonymous',
