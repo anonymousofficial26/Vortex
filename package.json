@@ -1,5 +1,5 @@
 {
-  "name": "free-sc-mini",
+  "name": "vortex-bot",
   "version": "1.0.2",
   "description": "A WhatsApp Bot with Multi-Number Support",
   "main": "index.js",
@@ -42,8 +42,8 @@
     "bot",
     "multi-device",
     "baileys",
-    "malvin-xd"
+    "anonymous"
   ],
-  "author": "Mr XDKING",
+  "author": "Anonymous",
   "license": "MIT"
 }
