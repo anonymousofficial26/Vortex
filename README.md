@@ -1,7 +1,7 @@
 <!-- Vortex Bot | Modern Profile README  -->
 
 <p align="center">
-  <img src="https://files.catbox.moe/2klf23.png" alt="Vortex Bot Banner" width="100%">
+  <img src="assets/vortex-menu.svg" alt="Vortex Bot Banner" width="100%">
 </p>
 
 <h1 align="center">Hi 👋, I'm Anonymous</h1>
