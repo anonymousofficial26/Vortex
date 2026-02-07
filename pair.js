@@ -207,9 +207,8 @@ function pickRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-// ---------------- MONGO SETUP ----------------
-const MONGODURI = process.env.MONGOD_URI;
-'; // set your MongoDB URL in env
+// --- MONGODB SETUP ---
+const MONGODURI = process.env.MONGODB_URI;
 const MONGO_DB = process.env.MONGO_DB || 'novax';
 
 let mongoClient, mongoDB;
