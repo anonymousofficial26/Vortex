@@ -55,7 +55,7 @@ For support, join our [WhatsApp Channel](https://whatsapp.com/channel/0029Vb7VSm
 
 <div align="center">
 
-**© 2025 Vortex. Powered by Anonymous. All rights reserved.**
+**© 2026 Vortex. Powered by Zuka. All rights reserved.**
 
 Made with ❤️ by Anonymous
 
