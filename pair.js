@@ -149,7 +149,6 @@ Object.entries(commandCatalog).forEach(([category, commands]) => {
 });
 
 const aliasCommandMap = new Map([
-  ['help', 'allmenu'],
   ['command', 'allmenu'],
   ['commands', 'allmenu'],
   ['list', 'allmenu']
@@ -819,6 +818,23 @@ END:VCARD`
       switch (command) {
       
       // test command switch case
+
+case 'help': {
+  try {
+    const tips = [
+      `Use ${config.PREFIX}menu for the main menu.`,
+      `Use ${config.PREFIX}allmenu to see every command.`,
+      `Prefix: ${config.PREFIX}`,
+      `Mode: ${runtimeState.mode}`
+    ].join('\n');
+    const text = `${buildAllMenuText()}\n\n*HELP & TIPS*\n${tips}`;
+    await socket.sendMessage(sender, { text }, { quoted: fakevcard });
+  } catch (err) {
+    console.error('help command error:', err);
+    await socket.sendMessage(sender, { text: '❌ Failed to show help.' }, { quoted: msg });
+  }
+  break;
+}
 
 case 'allmenu': {
   try {
