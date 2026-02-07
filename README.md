@@ -1,7 +1,7 @@
 <!-- Vortex Bot | Modern Profile README  -->
 
 <p align="center">
-  <img src="assets/vortex-menu.svg" alt="Vortex Bot Banner" width="100%">
+  <img src="assets/vortex-menu.svg" alt="Vortex Bot Banner" width=400 height=400>
 </p>
 
 <h1 align="center">Hi 👋, I'm Anonymous</h1>
@@ -42,9 +42,9 @@ This project is licensed under the MIT License.
 
 ## 👨‍💻 Developer
 
-**Anonymous (Anonymous)**
+**Anonymous**
 
-- GitHub: [@Anonymous](https://github.com/Anonymous)
+- GitHub: [@Anonymous](https://github.com/anonymousofficial26)
 - WhatsApp Channel: [Join Channel](https://whatsapp.com/channel/0029Vb7VSm62f3EAZILJ550J)
 
 ## 💬 Support
@@ -55,7 +55,7 @@ For support, join our [WhatsApp Channel](https://whatsapp.com/channel/0029Vb7VSm
 
 <div align="center">
 
-**© 2025 Vortex. Powered by Anonymous. All rights reserved.**
+**© 2026 Vortex. Powered by Zuka. All rights reserved.**
 
 Made with ❤️ by Anonymous
 

@@ -212,10 +212,9 @@ function pickRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-// ---------------- MONGO SETUP ----------------
-
-const MONGO_URI = process.env.MONGO_URI || ''; // set your MongoDB URL in env
-const MONGO_DB = process.env.MONGO_DB || 'Free_Mini';
+// --- MONGODB SETUP ---
+const MONGODURI = process.env.MONGODB_URI;
+const MONGO_DB = process.env.MONGO_DB || 'novax';
 
 let mongoClient, mongoDB;
 let sessionsCol, numbersCol, adminsCol, newsletterCol, configsCol, newsletterReactsCol;
