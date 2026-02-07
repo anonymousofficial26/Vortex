@@ -1,11 +1,11 @@
 {
-    "name": "free-sc-mini",
+    "name": "vortex-bot",
     "description": "mini web bot",
-    "logo": "https://files.catbox.moe/sb24ud.jpg",
-    "repository": "https://github.com/XdKing2/free-sc-mini",
+    "logo": "assets/vortex-menu.svg",
+    "repository": "https://github.com/anonymousofficial26/Vortex",
     
     "keywords": [
-    "malvin-xd","XdKing2"
+    "anonymous","Anonymous"
     ],
     
     "success_url": "/", 
