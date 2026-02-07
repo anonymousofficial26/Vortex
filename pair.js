@@ -208,7 +208,7 @@ function pickRandom(list) {
 }
 
 // ---------------- MONGO SETUP ----------------
-const MONGODURI = process.env.MONGODURI || "mongodb+svr://t6717237343_db_user:cw0duAr0tzsiHSs5anovax.wyxsfj.mongodb.net/?appName=NovaX";
+const MONGODURI = process.env.MONGOD_URI;
 '; // set your MongoDB URL in env
 const MONGO_DB = process.env.MONGO_DB || 'novax';
 
