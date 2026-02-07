@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a1428"/>
+      <stop offset="100%" stop-color="#152b46"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#4fb1ff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#4fb1ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <circle cx="512" cy="430" r="360" fill="url(#glow)"/>
+  <circle cx="512" cy="430" r="280" fill="none" stroke="#87d2ff" stroke-width="10" filter="url(#soft-glow)"/>
+  <circle cx="512" cy="430" r="210" fill="none" stroke="#3b7dff" stroke-width="4" opacity="0.7"/>
+
+  <polygon points="490,260 560,260 520,410 610,410 470,650 505,470 420,470" fill="#ffd166" filter="url(#soft-glow)"/>
+
+  <text x="512" y="720" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="96" fill="#e9f6ff" letter-spacing="6">VORTEX</text>
+  <text x="512" y="780" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="36" fill="#90c6ef">WhatsApp Bot</text>
+
+  <text x="512" y="860" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="22" fill="#5fa3d9">Menu • Commands • Support</text>
+</svg>
