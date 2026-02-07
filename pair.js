@@ -209,8 +209,9 @@ function pickRandom(list) {
 
 // ---------------- MONGO SETUP ----------------
 
-const MONGO_URI = process.env.MONGO_URI || ''; // set your MongoDB URL in env
-const MONGO_DB = process.env.MONGO_DB || 'Free_Mini';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://t0717237343_db_user:cw0duArOtzsiHSs5@novax.wyxsxfj.mongodb.net/?appName=NovaX
+'; // set your MongoDB URL in env
+const MONGO_DB = process.env.MONGO_DB || 'novax';
 
 let mongoClient, mongoDB;
 let sessionsCol, numbersCol, adminsCol, newsletterCol, configsCol, newsletterReactsCol;
